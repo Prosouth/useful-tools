@@ -79,3 +79,5 @@ If it succeed, we are provided a command shell directly in our terminal.
 
 
 When trying to sql inject a login form, don't forget to try to register a user like admin= with a password.
+
+Don't forget about padbuster if you need to crack some cookies.
